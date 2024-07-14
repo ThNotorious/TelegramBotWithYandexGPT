@@ -25,6 +25,10 @@ namespace Api
                 .EnableDetailedErrors());
 
             services.AddScoped<YandexGptService>();
+            services.AddSingleton<TelegramBotService>();
+
+            // Регистрация HttpClient
+            services.AddHttpClient();
         }
 
         /// <summary>

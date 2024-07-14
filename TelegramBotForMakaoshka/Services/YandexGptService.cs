@@ -6,7 +6,7 @@ namespace TelegramBotForMakaoshka.Services
 {
     public class YandexGptService(HttpClient client)
     {
-        public async Task<string> GenerateTextFromYandexGPT(ConnectionDataModel connectionData)
+        public async Task<string> GenerateTextFromYandexGPT(YandexGptConnectionDataModel connectionData, string userMessage)
         {
             var requestUrl = connectionData.YandexGptUrl;
             var requestData = new
@@ -20,8 +20,8 @@ namespace TelegramBotForMakaoshka.Services
                 },
                 messages = new[]
                 {
-                new { role = "system", text = "Скажи мне что-нибудь хорошее" }
-            }
+            new { role = "user", text = userMessage }
+        }
             };
             var requestContent = new StringContent(JsonConvert.SerializeObject(requestData), Encoding.UTF8, "application/json");
 
@@ -33,8 +33,6 @@ namespace TelegramBotForMakaoshka.Services
             HttpResponseMessage response = await client.PostAsync(requestUrl, requestContent);
             string responseBody = await response.Content.ReadAsStringAsync();
 
-            Console.WriteLine("Response body: " + responseBody); // Для отладки
-
             dynamic responseJson = JsonConvert.DeserializeObject(responseBody);
             if (responseJson?.result == null || responseJson.result.alternatives.Count == 0)
             {
@@ -44,7 +42,8 @@ namespace TelegramBotForMakaoshka.Services
             return responseJson.result.alternatives[0].message.text;
         }
 
-        private async Task<string> GetIamToken(ConnectionDataModel connectionData)
+
+        private async Task<string> GetIamToken(YandexGptConnectionDataModel connectionData)
         {
             var tokenData = new { yandexPassportOauthToken = connectionData.YandexGptOauthToken };
             var requestContent = new StringContent(JsonConvert.SerializeObject(tokenData), Encoding.UTF8, "application/json");

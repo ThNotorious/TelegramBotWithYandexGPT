@@ -5,6 +5,7 @@ namespace TelegramBotForMakaoshka.Repositories.Context
 {
     public class DataContext(DbContextOptions<DataContext> options) : DbContext(options)
     {
-        public DbSet<ConnectionDataModel> ConnectionData { get; set; }
+        public DbSet<YandexGptConnectionDataModel> YandexGptConnectionData { get; set; }
+        public DbSet<TelegramBotConnectionDataModel> TelegramBotConnectionData { get; set; }
     }
 }

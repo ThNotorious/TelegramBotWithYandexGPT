@@ -3,7 +3,7 @@
 namespace TelegramBotForMakaoshka.Models.Entities
 {
     [Table("yandex_gpt_connection_data")]
-    public class ConnectionDataModel
+    public class YandexGptConnectionDataModel
     {
         [Column("id")]
         public uint Id { get; set; }
